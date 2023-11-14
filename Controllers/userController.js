@@ -55,18 +55,19 @@ const userController = {
   },
 
   deleteUser({ params }, res) {
-    Thought.deleteMany({ userId: params.id })
-      .then(() => {
-        User.findOneAndDelete({ userId: params.id })
+    // Thought.deleteMany({ userId: params.id })
+    //   .then(() => {
+        User.findOneAndDelete({ _id: params.id })
           .then(dbUserData => {
             if (!dbUserData) {
               res.status(404).json({ message: 'No User found with this id!' });
               return;
             }
             res.json(dbUserData);
-          });
-      })
-      .catch(err => res.json(err));
+          })
+          .catch(err => res.json(err));
+      // })
+    
   },
 
   addFriend({ params }, res) {

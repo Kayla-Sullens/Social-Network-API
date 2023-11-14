@@ -36,7 +36,7 @@ const thoughtController = {
       });
   },
 
-  createThought({ params, body }, res) {
+  createThought({ body }, res) {
     Thought.create(body)
       .then(({ _id }) => {
         return User.findOneAndUpdate(
@@ -50,7 +50,7 @@ const thoughtController = {
           return res.status(404).json({ message: "No user found with this id!" });
         }
 
-        res.json(dbThoughtData);
+        res.json("Thought created successfully!");
       })
       .catch((err) => res.json(err));
   },
