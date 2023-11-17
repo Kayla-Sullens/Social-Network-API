@@ -3,25 +3,16 @@ const { User, Thought } = require('../models');
 const userController = {
 
   getAllUser(req, res) {
-    User.find({})
-      .select('-__v')
-      .sort({ _id: -1 })
-      .then(dbUserData => res.json(dbUserData))
-      .catch(err => {
-        console.log(err);
-        res.sendStatus(400);
-      });
+    User.find().then(dbUserData => res.json(dbUserData))
   },
 
   getUserById({ params }, res) {
     User.findOne({ _id: params.id })
       .populate({
         path: 'thoughts',
-        select: '-__v'
       })
       .populate({
         path: 'friends',
-        select: '-__v'
       })
       .then(dbUserData => {
         if (!dbUserData) {
@@ -30,16 +21,10 @@ const userController = {
         }
         res.json(dbUserData);
       })
-      .catch(err => {
-        console.log(err);
-        res.sendStatus(400);
-      });
   },
 
   createUser({ body }, res) {
-    User.create(body)
-      .then(dbUserData => res.json(dbUserData))
-      .catch(err => res.json(err));
+    User.create(body).then(dbUserData => res.json(dbUserData))
   },
 
   updateUser({ params, body }, res) {
@@ -51,12 +36,9 @@ const userController = {
         }
         res.json(dbUserData);
       })
-      .catch(err => res.json(err));
   },
 
   deleteUser({ params }, res) {
-    // Thought.deleteMany({ userId: params.id })
-    //   .then(() => {
         User.findOneAndDelete({ _id: params.id })
           .then(dbUserData => {
             if (!dbUserData) {
@@ -65,9 +47,6 @@ const userController = {
             }
             res.json(dbUserData);
           })
-          .catch(err => res.json(err));
-      // })
-    
   },
 
   addFriend({ params }, res) {
@@ -83,7 +62,6 @@ const userController = {
         }
         res.json(dbUserData);
       })
-      .catch((err) => res.status(400).json(err));
   },
 
   deleteFriend({ params }, res) {
@@ -99,7 +77,6 @@ const userController = {
         }
         res.json(dbUserData);
       })
-      .catch((err) => res.status(400).json(err));
   }
 };
 
